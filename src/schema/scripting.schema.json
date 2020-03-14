@@ -1,0 +1,280 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "title": "Scripting Documentation",
+  "definitions": {
+    "baseDocElement": {
+      "type": "object",
+      "properties": {
+        "shortName": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/documentationElement"
+          }
+        },
+        "type": {
+          "type": "string"
+        }
+      },
+      "required": [
+        "children",
+        "description",
+        "name",
+        "shortName",
+        "type"
+      ]
+    },
+    "documentationElement": {
+      "anyOf": [
+        {
+          "title": "Class Element",
+          "allOf": [
+            {
+              "$ref": "#/definitions/baseDocElement"
+            },
+            {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "class"
+                  ]
+                },
+                "superClass": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "type",
+                "superClass"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Library Element",
+          "allOf": [
+            {
+              "$ref": "#/definitions/baseDocElement"
+            },
+            {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "library"
+                  ]
+                }
+              },
+              "required": [
+                "type"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Call Element",
+          "allOf": [
+            {
+              "$ref": "#/definitions/baseDocElement"
+            },
+            {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "function",
+                    "operator"
+                  ]
+                },
+                "parameters": {
+                  "type": "string"
+                },
+                "returnDocumentation": {
+                  "type": "string"
+                },
+                "returnType": {
+                  "$ref": "#/definitions/typeSpecifier"
+                }
+              },
+              "required": [
+                "type",
+                "parameters",
+                "returnDocumentation",
+                "returnType"
+              ]
+            }
+          ]
+        },
+        {
+          "title": "Property Element",
+          "allOf": [
+            {
+              "$ref": "#/definitions/baseDocElement"
+            },
+            {
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "property"
+                  ]
+                },
+                "returnDocumentation": {
+                  "type": "string"
+                },
+                "getterType": {
+                  "$ref": "#/definitions/typeSpecifier"
+                },
+                "setterType": {
+                  "$ref": "#/definitions/typeSpecifier"
+                }
+              },
+              "required": [
+                "type",
+                "returnDocumentation",
+                "getterType",
+                "setterType"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    "typeSpecifier": {
+      "oneOf": [
+        {
+          "type": "string"
+        },
+        {
+          "title": "List Type",
+          "type": "object",
+          "properties": {
+            "element": {
+              "$ref": "#/definitions/typeSpecifier"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "list"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "element"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "title": "Tuple Type",
+          "type": "object",
+          "properties": {
+            "elements": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/typeSpecifier"
+              }
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "tuple"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "elements"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "title": "Iterator Type",
+          "type": "object",
+          "properties": {
+            "element": {
+              "$ref": "#/definitions/typeSpecifier"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "iterator"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "element"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "title": "Map Type",
+          "type": "object",
+          "properties": {
+            "key": {
+              "$ref": "#/definitions/typeSpecifier"
+            },
+            "value": {
+              "$ref": "#/definitions/typeSpecifier"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "map"
+              ]
+            }
+          },
+          "required": [
+            "key",
+            "value"
+          ],
+          "additionalProperties": false
+        }
+      ]
+    }
+  },
+  "type": "object",
+  "properties": {
+    "actions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "conditions": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "enums": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "number"
+      }
+    },
+    "elements": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/documentationElement"
+      }
+    }
+  },
+  "required": [
+    "actions",
+    "conditions",
+    "elements",
+    "enums"
+  ],
+  "additionalProperties": false
+}
