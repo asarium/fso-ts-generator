@@ -1,4 +1,4 @@
-import {TupleType, TypeSpecifier} from "scripting";
+import {TupleType, TypeSpecifier} from "./scripting";
 
 const INDENTATION = "    ";
 
@@ -9,7 +9,7 @@ export interface DeclarationGenerator {
     finalize: () => void;
 }
 
-export function fixTypeName(typeName: string): string {
+function fixTypeName(typeName: string): string {
     if (typeName == "object") {
         // Can't name a class "object"
         return "object_fso";

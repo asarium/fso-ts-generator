@@ -11,7 +11,7 @@ import {
     DocumentationElement, LibraryElement, PropertyElement,
     ScriptingDocumentation,
     TypeSpecifier
-} from "scripting";
+} from "./scripting";
 
 import scriptingSchema from "./schema/scripting.schema.json";
 
@@ -159,6 +159,8 @@ function writeRootDoc(generator: RootDeclarationGenerator,
     }
 }
 
+export * from "./scripting";
+
 export class ValidationError extends Error {
     constructor(public validationErrors: IOutputError[]) {
         super("Validation error");
@@ -166,20 +168,18 @@ export class ValidationError extends Error {
     }
 }
 
-function validateScriptingDoc<T>(json_content: T): void {
+export function validateScriptingDoc(json_content: unknown): ScriptingDocumentation {
     const ajv = new Ajv({jsonPointers: true});
     if (ajv.validate(scriptingSchema, json_content)) {
-        return;
+        return json_content as ScriptingDocumentation;
     }
 
     const output = betterAjvErrors(scriptingSchema, json_content, ajv.errors, {indent: 4});
     throw new ValidationError(output as IOutputError[]);
 }
 
-export function generateDefinitions(documentation_content: string): string {
-    const scripting: ScriptingDocumentation = JSON.parse(documentation_content);
-
-    validateScriptingDoc(scripting);
+export function generateDefinitions(documentation_content: unknown): string {
+    const scripting = validateScriptingDoc(documentation_content);
 
     const generator = new RootDeclarationGenerator();
 

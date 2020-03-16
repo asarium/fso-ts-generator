@@ -14,8 +14,8 @@ export class Gulpfile {
     async schemaToTypes() {
         const ts = await compileFromFile("src/schema/scripting.schema.json");
 
-        await fs.promises.mkdir("build/@types", {recursive: true});
-        await fs.promises.writeFile("build/@types/scripting.d.ts", ts);
+        await fs.promises.mkdir("src", {recursive: true});
+        await fs.promises.writeFile("src/scripting.ts", ts);
     }
 
     @Task()

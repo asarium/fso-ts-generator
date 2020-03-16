@@ -18,7 +18,7 @@ let root = commandpost
     .description("Generates TypeScript definitions from the FSO API documentation")
     .option("-i, --input <path>")
     .option("-o, --output <path>")
-    .action((opts, args) => {
+    .action((opts, _args) => {
         return generateDefs(opts.input[0], opts.output[0]);
     });
 
