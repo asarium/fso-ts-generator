@@ -1,4 +1,4 @@
-import {TupleType, TypeSpecifier} from "./scripting";
+import {TupleType, TypeSpecifier} from "../build/scripting";
 
 const INDENTATION = "    ";
 

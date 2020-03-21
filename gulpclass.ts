@@ -5,7 +5,7 @@ import * as ts from "gulp-typescript";
 import * as gulp from "gulp";
 import * as del from "del";
 
-const tsProject = ts.createProject("src/tsconfig.json");
+const tsProject = ts.createProject("./tsconfig.json");
 
 @Gulpclass()
 export class Gulpfile {
@@ -14,8 +14,8 @@ export class Gulpfile {
     async schemaToTypes() {
         const ts = await compileFromFile("src/schema/scripting.schema.json");
 
-        await fs.promises.mkdir("src", {recursive: true});
-        await fs.promises.writeFile("src/scripting.ts", ts);
+        await fs.promises.mkdir("build", {recursive: true});
+        await fs.promises.writeFile("build/scripting.ts", ts);
     }
 
     @Task()
@@ -33,7 +33,7 @@ export class Gulpfile {
 
     @SequenceTask()
     default() {
-        return ["schemaToTypes", "ts", "copySchema"];
+        return ["schemaToTypes", "ts"];
     }
 
     @Task()
