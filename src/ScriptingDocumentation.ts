@@ -1,70 +1,57 @@
+
+if (!process.versions.node) {
+    // Hack to make better-ajv-errors work in browsers
+    process.versions.node = "8.0";
+}
+
 import Ajv from "ajv";
 import betterAjvErrors, {IOutputError} from "better-ajv-errors";
+
+import {ScriptingDocumentation as DocuSchema} from "../build/scripting";
+import {convertSchemaElement, DocumentationElement} from "./DocumentationElement";
 import scriptingSchema from "./schema/scripting.schema.json";
+import {generateDefinitions} from "./ts-gen/typescript_gen";
+import {ValidationError} from "./ValidationError";
 
-import {
-    DocumentationElement,
-    ScriptingDocumentation as DocuSchema,
-} from "../build/scripting";
-import {generateDefinitions} from "./typescript_gen";
 
-export class ValidationError extends Error {
-    constructor(public validationErrors: IOutputError[]) {
-        super("Validation error");
-        Object.setPrototypeOf(this, ValidationError.prototype);
-    }
-}
-
-function validateScriptingDoc(json_content: unknown): DocuSchema {
+function validateScriptingDoc(jsonContent: unknown): DocuSchema {
     const ajv = new Ajv({jsonPointers: true});
-    if (ajv.validate(scriptingSchema, json_content)) {
-        return json_content as DocuSchema;
+    if (ajv.validate(scriptingSchema, jsonContent)) {
+        return jsonContent as DocuSchema;
     }
 
-    const output = betterAjvErrors(scriptingSchema, json_content, ajv.errors, {indent: 4});
+    const output = betterAjvErrors(scriptingSchema, jsonContent, ajv.errors, {indent: 4});
     throw new ValidationError(output as IOutputError[]);
-}
-
-type ExtendedDocuElement = DocumentationElement & {
-    parent: ExtendedDocuElement | null;
-    children: ExtendedDocuElement[];
-};
-
-function createExtendedElements(
-    baseEl: DocumentationElement,
-    parent: ExtendedDocuElement | null): ExtendedDocuElement {
-
-    const extended = {
-        ...baseEl,
-        parent,
-        children: [],
-    } as ExtendedDocuElement;
-
-    extended.children = baseEl.children.map((el) => createExtendedElements(el, extended));
-
-    return extended;
 }
 
 export class ScriptingDocumentation {
     actions: DocuSchema["actions"];
     conditions: DocuSchema["conditions"];
     enums: DocuSchema["enums"];
-    elements: ExtendedDocuElement[];
+    elements: DocumentationElement[];
+
+    _schemaData: DocuSchema;
 
     constructor(schemaData: DocuSchema) {
         this.actions = schemaData.actions;
         this.conditions = schemaData.conditions;
         this.enums = schemaData.enums;
-        this.elements = schemaData.elements.map((el) => createExtendedElements(el, null));
+        this.elements = schemaData.elements.map((el) => convertSchemaElement(el, "root"));
+
+        this._schemaData = schemaData;
+    }
+
+    static parseAndValidate(scriptingJson: unknown): ScriptingDocumentation {
+        const validated = validateScriptingDoc(scriptingJson);
+
+        return new ScriptingDocumentation(validated);
     }
 
     generateTypings(): string {
         return generateDefinitions(this);
     }
 
-    static parseAndValidate(scripting_json: unknown): ScriptingDocumentation {
-        const validated = validateScriptingDoc(scripting_json);
-
-        return new ScriptingDocumentation(validated);
+    serialize(): any {
+        return this._schemaData;
     }
 }

@@ -1,27 +1,29 @@
+import {TypeSpecifier} from "../../build/scripting";
 import {
-    ClassDeclarationGenerator,
-    NamespaceDeclarationGenerator,
-    RootDeclarationGenerator, typeSpecifierToTypeScriptType,
-} from "./DeclarationGenerator";
-import {
-    CallElement, ClassElement,
-    DocumentationElement, LibraryElement, PropertyElement,
-    ScriptingDocumentation,
-    TypeSpecifier,
-} from "../build/scripting";
+    CallElement,
+    ClassElement,
+    DocumentationElement,
+    LibraryElement,
+    PropertyElement,
+} from "../DocumentationElement";
+import {ScriptingDocumentation} from "../ScriptingDocumentation";
+import {ClassDeclarationGenerator} from "./ClassDeclarationGenerator";
+import {typeSpecifierToTypeScriptType} from "./DeclarationGenerator";
+import {NamespaceDeclarationGenerator} from "./NamespaceDeclarationGenerator";
+import {RootDeclarationGenerator} from "./RootDeclarationGenerator";
 
 function writeLibraryElementDoc(
     generator: RootDeclarationGenerator | NamespaceDeclarationGenerator,
     element: LibraryElement): void {
     let name = element.shortName;
-    if (name == "") {
+    if (name === "") {
         name = element.name;
     }
 
-    if (name == "hv" && generator instanceof RootDeclarationGenerator) {
+    if (name === "hv" && generator instanceof RootDeclarationGenerator) {
         generator.declareConstant("hv", "{[index:string]: any;}");
     } else {
-        let namespaceGen = generator.beginNamespace(name, element.description);
+        const namespaceGen = generator.beginNamespace(name, element.description);
 
         for (const child of element.children) {
             writeNamespaceDoc(namespaceGen, child);
@@ -72,12 +74,12 @@ function getArrayElementType(cls: ClassElement): TypeSpecifier {
 
 function writeClassElementDoc(generator: RootDeclarationGenerator, element: ClassElement) {
     let classGen;
-    if (isArrayType(element) && element.superClass.length == 0) {
+    if (isArrayType(element) && element.superClass.length === 0) {
         classGen = generator.beginClass(element.name,
             element.description,
             `Array<${typeSpecifierToTypeScriptType(getArrayElementType(element))}>`);
     } else {
-        if (element.superClass.length == 0) {
+        if (element.superClass.length === 0) {
             classGen = generator.beginClass(element.name, element.description);
         } else {
             classGen = generator.beginClass(element.name, element.description, element.superClass);
@@ -92,9 +94,9 @@ function writeClassElementDoc(generator: RootDeclarationGenerator, element: Clas
 }
 
 function writeOperatorElementDoc(generator: ClassDeclarationGenerator, element: CallElement) {
-    if (element.name == "__indexer") {
+    if (element.name === "__indexer") {
         generator.indexer(element.description, element.parameters, element.returnType, element.returnDocumentation);
-    } else if (element.name == "__tostring") {
+    } else if (element.name === "__tostring") {
         generator.function(element.returnType,
             element.returnDocumentation,
             element.description,
@@ -106,6 +108,7 @@ function writeOperatorElementDoc(generator: ClassDeclarationGenerator, element: 
 function writeClassDoc(
     generator: ClassDeclarationGenerator,
     element: DocumentationElement): void {
+
     switch (element.type) {
         case "property":
             writePropertyElementDoc(generator, element);
@@ -117,7 +120,7 @@ function writeClassDoc(
             writeOperatorElementDoc(generator, element);
             break;
         default:
-            throw new Error("Found invalid type in class!");
+            throw new Error(`Unknown type ${element.type}`);
     }
 }
 
@@ -164,7 +167,9 @@ export function generateDefinitions(docu: ScriptingDocumentation): string {
     const generator = new RootDeclarationGenerator();
 
     for (const e in docu.enums) {
-        generator.declareConstant(e, "enumeration");
+        if (docu.enums.hasOwnProperty(e)) {
+            generator.declareConstant(e, "enumeration");
+        }
     }
     for (const el of docu.elements) {
         writeRootDoc(generator, el);
