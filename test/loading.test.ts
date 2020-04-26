@@ -17,5 +17,5 @@ test("loading valid file works", async () => {
 
     const scriptingDoc = expectValidDoc(data.default);
 
-    expect(scriptingDoc.actions).toContain("On Splash Screen");
+    expect(scriptingDoc.conditions).toContain("State");
 });

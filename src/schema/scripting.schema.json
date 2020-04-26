@@ -242,14 +242,64 @@
           "additionalProperties": false
         }
       ]
+    },
+    "hookVariable": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "description": {
+          "type": "string"
+        },
+        "name": {
+          "type": "string"
+        },
+        "type": {
+          "$ref": "#/definitions/typeSpecifier"
+        }
+      },
+      "required": [
+        "description",
+        "name",
+        "type"
+      ]
     }
   },
   "type": "object",
   "properties": {
+    "version": {
+      "type": "number",
+      "enum": [
+        2
+      ]
+    },
     "actions": {
       "type": "array",
       "items": {
-        "type": "string"
+        "type": "object",
+        "additionalProperties": false,
+        "properties": {
+          "description": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "overridable": {
+            "type": "boolean"
+          },
+          "hookVars": {
+            "type": "array",
+            "items": {
+              "$ref": "#/definitions/hookVariable"
+            }
+          }
+        },
+        "required": [
+          "description",
+          "name",
+          "overridable",
+          "hookVars"
+        ]
       }
     },
     "conditions": {
@@ -269,13 +319,21 @@
       "items": {
         "$ref": "#/definitions/documentationElement"
       }
+    },
+    "globalVars": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/hookVariable"
+      }
     }
   },
   "required": [
     "actions",
     "conditions",
     "elements",
-    "enums"
+    "enums",
+    "version",
+    "globalVars"
   ],
   "additionalProperties": false
 }

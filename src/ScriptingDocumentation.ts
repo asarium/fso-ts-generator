@@ -1,4 +1,3 @@
-
 if (!process.versions.node) {
     // Hack to make better-ajv-errors work in browsers
     process.versions.node = "8.0";
@@ -28,6 +27,7 @@ export class ScriptingDocumentation {
     actions: DocuSchema["actions"];
     conditions: DocuSchema["conditions"];
     enums: DocuSchema["enums"];
+    globalVariables: DocuSchema["globalVars"];
     elements: DocumentationElement[];
 
     _schemaData: DocuSchema;
@@ -36,6 +36,7 @@ export class ScriptingDocumentation {
         this.actions = schemaData.actions;
         this.conditions = schemaData.conditions;
         this.enums = schemaData.enums;
+        this.globalVariables = schemaData.globalVars;
         this.elements = schemaData.elements.map((el) => convertSchemaElement(el, "root"));
 
         this._schemaData = schemaData;

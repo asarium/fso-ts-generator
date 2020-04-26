@@ -1,53 +1,347 @@
 {
   "actions": [
-    "On Game Init",
-    "On Splash Screen",
-    "On State Start",
-    "On Frame",
-    "On Action",
-    "On Action Stopped",
-    "On Key Pressed",
-    "On Key Released",
-    "On Mouse Moved",
-    "On Mouse Pressed",
-    "On Mouse Released",
-    "On State End",
-    "On Mission Start",
-    "On HUD Draw",
-    "On Ship Collision",
-    "On Weapon Collision",
-    "On Debris Collision",
-    "On Asteroid Collision",
-    "On Object Render",
-    "On Warp In",
-    "On Warp Out",
-    "On Death",
-    "On Mission End",
-    "On Weapon Delete",
-    "On Weapon Equipped",
-    "On Weapon Fired",
-    "On Weapon Selected",
-    "On Weapon Deselected",
-    "On Gameplay Start",
-    "On Turret Fired",
-    "On Primary Fire",
-    "On Secondary Fire",
-    "On Ship Arrive",
-    "On Beam Collision",
-    "On Message Received",
-    "On HUD Message Received",
-    "On Afterburner Engage",
-    "On Afterburner Stop",
-    "On Beam Fire",
-    "On Simulation",
-    "On Load Screen",
-    "On Campaign Mission Accept",
-    "On Ship Depart",
-    "On Weapon Created",
-    "On Waypoints Done",
-    "On Subsystem Destroyed",
-    "On Goals Cleared",
-    "On Briefing Stage"
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Action",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Action Stopped",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Afterburner Engage",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Afterburner Stop",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Asteroid Collision",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Beam Collision",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Beam Fire",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Briefing Stage",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Campaign Mission Accept",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Death",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Debris Collision",
+      "overridable": true
+    },
+    {
+      "description": "Called every frame as the last action before showing the frame result to the user.",
+      "hookVars": [],
+      "name": "On Frame",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Game Init",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Gameplay Start",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Goals Cleared",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On HUD Draw",
+      "overridable": true
+    },
+    {
+      "description": "Called when a HUD message is received. For normal messages this will be called with the final text that appears on the HUD (e.g. [ship]: [message]). Will also be called for engine generated messages.",
+      "hookVars": [
+        {
+          "description": "The text of the message.",
+          "name": "Text",
+          "type": "string"
+        },
+        {
+          "description": "The type of message sent by the engine.",
+          "name": "SourceType",
+          "type": "number"
+        }
+      ],
+      "name": "On HUD Message Received",
+      "overridable": false
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Key Pressed",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Key Released",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Load Screen",
+      "overridable": true
+    },
+    {
+      "description": "Invoked when a mission sends a message.",
+      "hookVars": [
+        {
+          "description": "The name of the message in the mission",
+          "name": "Name",
+          "type": "string"
+        },
+        {
+          "description": "The text of the sent message. This will have any placeholder expanded (e.g. SEXP variables) and will be what the player sees on the HUD.",
+          "name": "Message",
+          "type": "string"
+        },
+        {
+          "description": "The source of the message as a string. Same as used by the engine on the HUD.",
+          "name": "SenderString",
+          "type": "string"
+        },
+        {
+          "description": "true if this is a builtin message, false of this is a mission message",
+          "name": "Builtin",
+          "type": "boolean"
+        },
+        {
+          "description": "If sent from an object, the object that has sent the message. Invalid if not sent from an object",
+          "name": "Sender",
+          "type": "ship"
+        },
+        {
+          "description": "The scripting handle of the message being sent.",
+          "name": "MessageHandle",
+          "type": "message"
+        }
+      ],
+      "name": "On Message Received",
+      "overridable": false
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Mission End",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Mission Start",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Mouse Moved",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Mouse Pressed",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Mouse Released",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Object Render",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Primary Fire",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Secondary Fire",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Ship Arrive",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Ship Collision",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Ship Depart",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Simulation",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Splash Screen",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On State End",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On State Start",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Subsystem Destroyed",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Turret Fired",
+      "overridable": true
+    },
+    {
+      "description": "Called when a ship warps in",
+      "hookVars": [
+        {
+          "description": "The object that is warping in.",
+          "name": "Self",
+          "type": "ship"
+        }
+      ],
+      "name": "On Warp In",
+      "overridable": true
+    },
+    {
+      "description": "Called when a ship warps out",
+      "hookVars": [
+        {
+          "description": "The object that is warping out.",
+          "name": "Self",
+          "type": "ship"
+        }
+      ],
+      "name": "On Warp Out",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Waypoints Done",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Weapon Collision",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Weapon Created",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Weapon Delete",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Weapon Deselected",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Weapon Equipped",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Weapon Fired",
+      "overridable": true
+    },
+    {
+      "description": "",
+      "hookVars": [],
+      "name": "On Weapon Selected",
+      "overridable": true
+    }
   ],
   "conditions": [
     "State",
@@ -849,24 +1143,6 @@
       "description": "Controls library",
       "name": "Controls",
       "shortName": "io",
-      "type": "library"
-    },
-    {
-      "children": [
-        {
-          "children": [],
-          "description": "Adds a function to be called from the specified game hook",
-          "name": "addHook",
-          "parameters": "string name, function hookFunction, [table conditionals = {}], [function override_func = return false]",
-          "returnDocumentation": "true if hook was installed properly, false otherwise",
-          "returnType": "boolean",
-          "shortName": "",
-          "type": "function"
-        }
-      ],
-      "description": "Basic engine access functions",
-      "name": "Engine",
-      "shortName": "engine",
       "type": "library"
     },
     {
@@ -2261,10 +2537,7 @@
           "name": "getArrivalList",
           "parameters": "",
           "returnDocumentation": "An iterator across all the yet to arrive ships. Can be used in a for .. in loop",
-          "returnType": {
-            "element": "parse_object",
-            "type": "iterator"
-          },
+          "returnType": "iterator[parse_object]",
           "shortName": "",
           "type": "function"
         }
@@ -3967,16 +4240,6 @@
         },
         {
           "children": [],
-          "description": "The SEXP formula for this event",
-          "getterType": "sexp_node",
-          "name": "Formula",
-          "returnDocumentation": "The formula of the event or nil on error",
-          "setterType": "",
-          "shortName": "",
-          "type": "property"
-        },
-        {
-          "children": [],
           "description": "Detects whether handle is valid",
           "name": "isValid",
           "parameters": "",
@@ -5132,11 +5395,7 @@
         {
           "children": [],
           "description": "Contains a list mapping a flag name to its value. Possible names are:<ul><li><b>ForceMultiValueSelection:</b> If true, a selection option with two values should be displayed the same as an option with more possible values</li></ul>",
-          "getterType": {
-            "key": "string",
-            "type": "map",
-            "value": "boolean"
-          },
+          "getterType": "{string->boolean...}",
           "name": "Flags",
           "returnDocumentation": "The table of flags values.",
           "setterType": "",
@@ -5406,10 +5665,10 @@
         {
           "children": [],
           "description": "The orientation of the object.",
-          "getterType": "orientation",
+          "getterType": "matrix",
           "name": "Orientation",
           "returnDocumentation": "The orientation",
-          "setterType": "orientation",
+          "setterType": "matrix",
           "shortName": "",
           "type": "property"
         },
@@ -5462,16 +5721,6 @@
           },
           "name": "Subsystems",
           "returnDocumentation": "An array of the parse subsystems of this object",
-          "setterType": "",
-          "shortName": "",
-          "type": "property"
-        },
-        {
-          "children": [],
-          "description": "Gets the arrival cue for this parse object.",
-          "getterType": "sexp_node",
-          "name": "ArrivalCue",
-          "returnDocumentation": "The arrival queue handle or nil on error",
           "setterType": "",
           "shortName": "",
           "type": "property"
@@ -6235,58 +6484,6 @@
       ],
       "description": "Player related scoring stats.",
       "name": "scoring_stats",
-      "shortName": "",
-      "superClass": "",
-      "type": "class"
-    },
-    {
-      "children": [
-        {
-          "children": [],
-          "description": "Either a SEXP_ATOM or SEXP_LIST",
-          "getterType": "enumeration",
-          "name": "Type",
-          "returnDocumentation": "The type of this sexp node or nil on error",
-          "setterType": "",
-          "shortName": "",
-          "type": "property"
-        },
-        {
-          "children": [],
-          "description": "Gets the text of this SEXP node",
-          "getterType": "string",
-          "name": "Text",
-          "returnDocumentation": "The text or nil on error",
-          "setterType": "",
-          "shortName": "",
-          "type": "property"
-        },
-        {
-          "children": [],
-          "description": "Gets an iterator to the child nodes of this node.<br><b>Example:</b> <tt>for child in node.getChildNodes() do <...> done</tt>",
-          "name": "getChildNodes",
-          "parameters": "",
-          "returnDocumentation": "An iterator of all the child nodes.",
-          "returnType": {
-            "element": "sexp_node",
-            "type": "iterator"
-          },
-          "shortName": "",
-          "type": "function"
-        },
-        {
-          "children": [],
-          "description": "Determines if the handle is valid",
-          "name": "isValid",
-          "parameters": "",
-          "returnDocumentation": "true if valid, false otherwise",
-          "returnType": "boolean",
-          "shortName": "",
-          "type": "function"
-        }
-      ],
-      "description": "A node in a SEXP tree",
-      "name": "sexp_node",
       "shortName": "",
       "superClass": "",
       "type": "class"
@@ -9406,86 +9603,92 @@
     }
   ],
   "enums": {
-    "ALPHABLEND_FILTER": 13,
-    "ALPHABLEND_NONE": 14,
-    "CFILE_TYPE_MEMORY_MAPPED": 16,
-    "CFILE_TYPE_NORMAL": 15,
-    "LOCK": 11,
-    "LUA_ADDITIVE_BUTTON_CONTROL": 55,
-    "LUA_FULL_CONTROLS": 53,
-    "LUA_OVERRIDE_BUTTON_CONTROL": 56,
-    "LUA_STEERING_CONTROLS": 52,
-    "MESSAGE_PRIORITY_HIGH": 76,
-    "MESSAGE_PRIORITY_LOW": 74,
-    "MESSAGE_PRIORITY_NORMAL": 75,
-    "MISSION_REPEAT": 50,
-    "MOUSE_LEFT_BUTTON": 0,
-    "MOUSE_MIDDLE_BUTTON": 2,
-    "MOUSE_RIGHT_BUTTON": 1,
-    "NONE": 45,
-    "NORMAL_BUTTON_CONTROLS": 54,
-    "NORMAL_CONTROLS": 51,
-    "OPTION_TYPE_RANGE": 78,
-    "OPTION_TYPE_SELECTION": 77,
-    "ORDER_ATTACK": 17,
-    "ORDER_ATTACK_ANY": 18,
-    "ORDER_ATTACK_SHIP_CLASS": 39,
-    "ORDER_ATTACK_WING": 37,
-    "ORDER_DEPART": 19,
-    "ORDER_DISABLE": 20,
-    "ORDER_DISARM": 21,
-    "ORDER_DOCK": 22,
-    "ORDER_EVADE": 23,
-    "ORDER_FLY_TO": 24,
-    "ORDER_FORM_ON_WING": 25,
-    "ORDER_GUARD": 26,
-    "ORDER_GUARD_WING": 38,
-    "ORDER_IGNORE_SHIP": 27,
-    "ORDER_KEEP_SAFE_DISTANCE": 28,
-    "ORDER_PLAY_DEAD": 29,
-    "ORDER_PLAY_DEAD_PERSISTENT": 30,
-    "ORDER_REARM": 31,
-    "ORDER_STAY_NEAR": 32,
-    "ORDER_STAY_STILL": 33,
-    "ORDER_UNDOCK": 34,
-    "ORDER_WAYPOINTS": 35,
-    "ORDER_WAYPOINTS_ONCE": 36,
-    "PARTICLE_BITMAP": 4,
-    "PARTICLE_DEBUG": 3,
-    "PARTICLE_FIRE": 5,
-    "PARTICLE_PERSISTENT_BITMAP": 8,
-    "PARTICLE_SMOKE": 6,
-    "PARTICLE_SMOKE2": 7,
-    "SEXPVAR_CAMPAIGN_PERSISTENT": 40,
-    "SEXPVAR_NOT_PERSISTENT": 41,
-    "SEXPVAR_PLAYER_PERSISTENT": 42,
-    "SEXPVAR_TYPE_NUMBER": 43,
-    "SEXPVAR_TYPE_STRING": 44,
-    "SEXP_ATOM": 80,
-    "SEXP_LIST": 79,
-    "SHIELD_BACK": 49,
-    "SHIELD_FRONT": 46,
-    "SHIELD_LEFT": 47,
-    "SHIELD_RIGHT": 48,
-    "TEXTURE_DYNAMIC": 10,
-    "TEXTURE_STATIC": 9,
-    "UNLOCK": 12,
-    "VM_CAMERA_LOCKED": 64,
-    "VM_CENTERING": 73,
-    "VM_CHASE": 61,
-    "VM_DEAD_VIEW": 60,
-    "VM_EXTERNAL": 58,
-    "VM_EXTERNAL_CAMERA_LOCKED": 63,
-    "VM_FREECAMERA": 72,
-    "VM_INTERNAL": 57,
-    "VM_OTHER_SHIP": 62,
-    "VM_PADLOCK_LEFT": 68,
-    "VM_PADLOCK_REAR": 67,
-    "VM_PADLOCK_RIGHT": 69,
-    "VM_PADLOCK_UP": 66,
-    "VM_TOPDOWN": 71,
-    "VM_TRACK": 59,
-    "VM_WARPIN_ANCHOR": 70,
-    "VM_WARP_CHASE": 65
-  }
+    "ALPHABLEND_FILTER": 14,
+    "ALPHABLEND_NONE": 27,
+    "CFILE_TYPE_MEMORY_MAPPED": 21,
+    "CFILE_TYPE_NORMAL": 20,
+    "LOCK": 12,
+    "LUA_ADDITIVE_BUTTON_CONTROL": 52,
+    "LUA_FULL_CONTROLS": 50,
+    "LUA_OVERRIDE_BUTTON_CONTROL": 53,
+    "LUA_STEERING_CONTROLS": 49,
+    "MESSAGE_PRIORITY_HIGH": 73,
+    "MESSAGE_PRIORITY_LOW": 71,
+    "MESSAGE_PRIORITY_NORMAL": 72,
+    "MISSION_REPEAT": 47,
+    "MOUSE_LEFT_BUTTON": 1,
+    "MOUSE_MIDDLE_BUTTON": 3,
+    "MOUSE_RIGHT_BUTTON": 2,
+    "NONE": 15,
+    "NORMAL_BUTTON_CONTROLS": 51,
+    "NORMAL_CONTROLS": 48,
+    "OPTION_TYPE_RANGE": 79,
+    "OPTION_TYPE_SELECTION": 78,
+    "ORDER_ATTACK": 28,
+    "ORDER_ATTACK_ANY": 29,
+    "ORDER_ATTACK_SHIP_CLASS": 74,
+    "ORDER_ATTACK_WING": 69,
+    "ORDER_DEPART": 30,
+    "ORDER_DISABLE": 31,
+    "ORDER_DISARM": 32,
+    "ORDER_DOCK": 33,
+    "ORDER_EVADE": 34,
+    "ORDER_FLY_TO": 35,
+    "ORDER_FORM_ON_WING": 36,
+    "ORDER_GUARD": 37,
+    "ORDER_GUARD_WING": 70,
+    "ORDER_IGNORE_SHIP": 38,
+    "ORDER_KEEP_SAFE_DISTANCE": 39,
+    "ORDER_PLAY_DEAD": 40,
+    "ORDER_PLAY_DEAD_PERSISTENT": 77,
+    "ORDER_REARM": 41,
+    "ORDER_STAY_NEAR": 42,
+    "ORDER_STAY_STILL": 43,
+    "ORDER_UNDOCK": 44,
+    "ORDER_WAYPOINTS": 45,
+    "ORDER_WAYPOINTS_ONCE": 46,
+    "PARTICLE_BITMAP": 5,
+    "PARTICLE_DEBUG": 4,
+    "PARTICLE_FIRE": 6,
+    "PARTICLE_PERSISTENT_BITMAP": 9,
+    "PARTICLE_SMOKE": 7,
+    "PARTICLE_SMOKE2": 8,
+    "SEXPVAR_CAMPAIGN_PERSISTENT": 22,
+    "SEXPVAR_NOT_PERSISTENT": 23,
+    "SEXPVAR_PLAYER_PERSISTENT": 24,
+    "SEXPVAR_TYPE_NUMBER": 25,
+    "SEXPVAR_TYPE_STRING": 26,
+    "SHIELD_BACK": 19,
+    "SHIELD_FRONT": 16,
+    "SHIELD_LEFT": 17,
+    "SHIELD_RIGHT": 18,
+    "TEXTURE_DYNAMIC": 11,
+    "TEXTURE_STATIC": 10,
+    "UNLOCK": 13,
+    "VM_CAMERA_LOCKED": 75,
+    "VM_CENTERING": 76,
+    "VM_CHASE": 58,
+    "VM_DEAD_VIEW": 57,
+    "VM_EXTERNAL": 55,
+    "VM_EXTERNAL_CAMERA_LOCKED": 60,
+    "VM_FREECAMERA": 68,
+    "VM_INTERNAL": 54,
+    "VM_OTHER_SHIP": 59,
+    "VM_PADLOCK_LEFT": 64,
+    "VM_PADLOCK_REAR": 63,
+    "VM_PADLOCK_RIGHT": 65,
+    "VM_PADLOCK_UP": 62,
+    "VM_TOPDOWN": 67,
+    "VM_TRACK": 56,
+    "VM_WARPIN_ANCHOR": 66,
+    "VM_WARP_CHASE": 61
+  },
+  "globalVars": [
+    {
+      "description": "The player object in a mission. Does not need to be a ship (e.g. in multiplayer). Not present if not in a game play state.",
+      "name": "Player",
+      "type": "object"
+    }
+  ],
+  "version": 2
 }
