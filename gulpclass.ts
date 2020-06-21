@@ -1,9 +1,9 @@
-import {Gulpclass, SequenceTask, Task} from "gulpclass/Decorators";
-import {compileFromFile} from 'json-schema-to-typescript'
-import * as fs from "fs";
-import * as ts from "gulp-typescript";
-import * as gulp from "gulp";
 import * as del from "del";
+import * as fs from "fs";
+import * as gulp from "gulp";
+import * as ts from "gulp-typescript";
+import {Gulpclass, SequenceTask, Task} from "gulpclass/Decorators";
+import {compileFromFile} from "json-schema-to-typescript";
 
 const tsProject = ts.createProject("./tsconfig.json");
 
@@ -21,14 +21,14 @@ export class Gulpfile {
     @Task()
     ts() {
         return tsProject.src()
-                        .pipe(tsProject())
-                        .js.pipe(gulp.dest('dist'));
+            .pipe(tsProject())
+            .js.pipe(gulp.dest("dist"));
     }
 
     @Task()
     copySchema() {
-        return gulp.src('./src/schema/*.json')
-                   .pipe(gulp.dest('./dist/schema/'));
+        return gulp.src("./src/schema/*.json")
+            .pipe(gulp.dest("./dist/schema/"));
     }
 
     @SequenceTask()
@@ -39,8 +39,8 @@ export class Gulpfile {
     @Task()
     clean() {
         return del([
-                       "dist",
-                       "build",
-                   ]);
+            "dist",
+            "build",
+        ]);
     }
 }

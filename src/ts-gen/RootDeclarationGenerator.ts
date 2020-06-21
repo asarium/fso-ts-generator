@@ -1,6 +1,7 @@
 import {ClassDeclarationGenerator} from "./ClassDeclarationGenerator";
-import {DeclarationGenerator, fixTypeName, getHtmlLines, indentLine} from "./DeclarationGenerator";
+import {DeclarationGenerator, indentLine} from "./DeclarationGenerator";
 import {NamespaceDeclarationGenerator} from "./NamespaceDeclarationGenerator";
+import {fixTypeName, getHtmlLines} from "./ts_utils";
 
 export class RootDeclarationGenerator implements DeclarationGenerator {
     private _lines: string[] = ["/** @noSelfInFile */"];
@@ -18,8 +19,10 @@ export class RootDeclarationGenerator implements DeclarationGenerator {
         // Only top level namespaces need the "declare"
         this.addLine(`declare namespace ${name} {`);
 
-        return new NamespaceDeclarationGenerator((line) => this.addLine(indentLine(line)),
-            () => this.addLine("}"));
+        return new NamespaceDeclarationGenerator(
+            line => this.addLine(indentLine(line)),
+            () => this.addLine("}"),
+        );
     }
 
     beginClass(name: string, documentation: string, superClass?: string): ClassDeclarationGenerator {
@@ -34,14 +37,17 @@ export class RootDeclarationGenerator implements DeclarationGenerator {
             this.addLine(`declare interface ${fixTypeName(name)} {`);
         }
 
-        return new ClassDeclarationGenerator((line) => this.addLine(indentLine(line)), () => this.addLine("}"));
+        return new ClassDeclarationGenerator(
+            line => this.addLine(indentLine(line)),
+            () => this.addLine("}"),
+        );
     }
 
     finalize(): string {
         return this._lines.join("\n");
     }
 
-    private addLine(line: string) {
+    private addLine(line: string): void {
         this._lines.push(line);
     }
 }

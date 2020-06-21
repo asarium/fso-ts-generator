@@ -1,49 +1,32 @@
-import {TypeSpecifier} from "../../build/scripting";
-import {
-    AddLineCallback,
-    BaseDeclarationGenerator,
-    FinalizeCallback,
-    getHtmlLines,
-    isTuple,
-    typeSpecifierToTypeScriptType,
-} from "./DeclarationGenerator";
+import {OverloadList, SimpleParameterList, TypeSpecifier} from "../../build/scripting";
+import {isTupleType} from "../utils";
+import {BaseDeclarationGenerator} from "./DeclarationGenerator";
+import {getHtmlLines, outputFunction, typeSpecifierToTypeScriptType} from "./ts_utils";
 
 export class ClassDeclarationGenerator extends BaseDeclarationGenerator {
-    constructor(addLine: AddLineCallback, finalize: FinalizeCallback) {
-        super(addLine, finalize);
-    }
-
     function(
         returnType: TypeSpecifier,
         returnDoc: string,
         description: string,
-        params: string,
-        name: string): void {
-        this.addLine("/**");
-        for (const line of getHtmlLines(description)) {
-            this.addLine(` * ${line}`);
-        }
-
-        if (params.length !== 0) {
-            // Handle the simple case of no parameters
-            this.addLine(` * @param {any[]} args ${params}`);
-        }
-        this.addLine(` * @return {${typeSpecifierToTypeScriptType(returnType)}} ${returnDoc}`);
-        if (isTuple(returnType)) {
-            this.addLine(" * @tupleReturn");
-        }
-        this.addLine(" */");
-        if (name === "read" && isTuple(returnType) && returnType.elements[1] === "...") {
+        params: SimpleParameterList | OverloadList,
+        name: string,
+    ): void {
+        if (name === "read" && isTupleType(returnType) && returnType.elements[1] === "...") {
             // This is a very special case for file.read since we can't really express the return type in the
             // documentation
+            this.addLine("/**");
+            for (const line of getHtmlLines(description)) {
+                this.addLine(` * ${line}`);
+            }
+            this.addLine(` * @param arg ${params}`);
+            this.addLine(` * @return ${returnDoc}`);
+            if (isTupleType(returnType)) {
+                this.addLine(" * @tupleReturn");
+            }
+            this.addLine(" */");
             this.addLine(`${name}<T>(arg: T): T;`);
         } else {
-            if (params.length === 0) {
-                // We can handle no parameters just fine without proper parameter list support
-                this.addLine(`${name}(): ${typeSpecifierToTypeScriptType(returnType)};`);
-            } else {
-                this.addLine(`${name}(...args: any[]): ${typeSpecifierToTypeScriptType(returnType)};`);
-            }
+            outputFunction((s: string) => this.addLine(s), returnType, returnDoc, description, params, name, false);
         }
     }
 
@@ -53,7 +36,7 @@ export class ClassDeclarationGenerator extends BaseDeclarationGenerator {
             this.addLine(` * ${line}`);
         }
         this.addLine(` * @type {${typeSpecifierToTypeScriptType(type)}} ${returnDoc}`);
-        if (isTuple(type)) {
+        if (isTupleType(type)) {
             this.addLine(" * @tupleReturn");
         }
         this.addLine(" */");
@@ -61,7 +44,12 @@ export class ClassDeclarationGenerator extends BaseDeclarationGenerator {
         this.addLine(`${name}: ${typeSpecifierToTypeScriptType(type)};`);
     }
 
-    indexer(description: string, params: string, returnType: TypeSpecifier, returnDoc: string): void {
+    indexer(
+        description: string,
+        params: SimpleParameterList | OverloadList,
+        returnType: TypeSpecifier,
+        returnDoc: string,
+    ): void {
         this.addLine("/**");
         for (const line of getHtmlLines(description)) {
             this.addLine(` * ${line}`);

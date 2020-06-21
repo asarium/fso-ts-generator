@@ -8,13 +8,14 @@ import {
 } from "../DocumentationElement";
 import {ScriptingDocumentation} from "../ScriptingDocumentation";
 import {ClassDeclarationGenerator} from "./ClassDeclarationGenerator";
-import {typeSpecifierToTypeScriptType} from "./DeclarationGenerator";
 import {NamespaceDeclarationGenerator} from "./NamespaceDeclarationGenerator";
 import {RootDeclarationGenerator} from "./RootDeclarationGenerator";
+import {typeSpecifierToTypeScriptType} from "./ts_utils";
 
 function writeLibraryElementDoc(
     generator: RootDeclarationGenerator | NamespaceDeclarationGenerator,
-    element: LibraryElement): void {
+    element: LibraryElement,
+): void {
     let name = element.shortName;
     if (name === "") {
         name = element.name;
@@ -35,17 +36,18 @@ function writeLibraryElementDoc(
 
 function writeFunctionElementDoc(
     generator: NamespaceDeclarationGenerator | ClassDeclarationGenerator,
-    element: CallElement): void {
-    generator.function(element.returnType,
+    element: CallElement,
+): void {
+    generator.function(
+        element.returnType,
         element.returnDocumentation,
         element.description,
         element.parameters,
-        element.name);
+        element.name,
+    );
 }
 
-function writePropertyElementDoc(
-    generator: ClassDeclarationGenerator,
-    element: PropertyElement): void {
+function writePropertyElementDoc(generator: ClassDeclarationGenerator, element: PropertyElement): void {
     // Accessors
     generator.getter(element.name, element.getterType, element.description, element.returnDocumentation);
 }
@@ -72,12 +74,14 @@ function getArrayElementType(cls: ClassElement): TypeSpecifier {
     return indexer.returnType;
 }
 
-function writeClassElementDoc(generator: RootDeclarationGenerator, element: ClassElement) {
+function writeClassElementDoc(generator: RootDeclarationGenerator, element: ClassElement): void {
     let classGen;
     if (isArrayType(element) && element.superClass.length === 0) {
-        classGen = generator.beginClass(element.name,
+        classGen = generator.beginClass(
+            element.name,
             element.description,
-            `Array<${typeSpecifierToTypeScriptType(getArrayElementType(element))}>`);
+            `Array<${typeSpecifierToTypeScriptType(getArrayElementType(element))}>`,
+        );
     } else {
         if (element.superClass.length === 0) {
             classGen = generator.beginClass(element.name, element.description);
@@ -93,22 +97,21 @@ function writeClassElementDoc(generator: RootDeclarationGenerator, element: Clas
     classGen.finalize();
 }
 
-function writeOperatorElementDoc(generator: ClassDeclarationGenerator, element: CallElement) {
+function writeOperatorElementDoc(generator: ClassDeclarationGenerator, element: CallElement): void {
     if (element.name === "__indexer") {
         generator.indexer(element.description, element.parameters, element.returnType, element.returnDocumentation);
     } else if (element.name === "__tostring") {
-        generator.function(element.returnType,
+        generator.function(
+            element.returnType,
             element.returnDocumentation,
             element.description,
             element.parameters,
-            "toString");
+            "toString",
+        );
     }
 }
 
-function writeClassDoc(
-    generator: ClassDeclarationGenerator,
-    element: DocumentationElement): void {
-
+function writeClassDoc(generator: ClassDeclarationGenerator, element: DocumentationElement): void {
     switch (element.type) {
         case "property":
             writePropertyElementDoc(generator, element);
@@ -124,13 +127,11 @@ function writeClassDoc(
     }
 }
 
-function writeLibraryPropertyDoc(generator: NamespaceDeclarationGenerator, element: PropertyElement) {
+function writeLibraryPropertyDoc(generator: NamespaceDeclarationGenerator, element: PropertyElement): void {
     generator.declareProperty(element.name, element.getterType, element.description, element.returnDocumentation);
 }
 
-function writeNamespaceDoc(
-    generator: NamespaceDeclarationGenerator,
-    element: DocumentationElement): void {
+function writeNamespaceDoc(generator: NamespaceDeclarationGenerator, element: DocumentationElement): void {
     switch (element.type) {
         case "library":
             writeLibraryElementDoc(generator, element);
@@ -148,9 +149,7 @@ function writeNamespaceDoc(
     }
 }
 
-function writeRootDoc(
-    generator: RootDeclarationGenerator,
-    element: DocumentationElement): void {
+function writeRootDoc(generator: RootDeclarationGenerator, element: DocumentationElement): void {
     switch (element.type) {
         case "library":
             writeLibraryElementDoc(generator, element);

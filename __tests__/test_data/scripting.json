@@ -67,6 +67,18 @@
       "overridable": true
     },
     {
+      "description": "Called when a ship starts the departure process.",
+      "hookVars": [
+        {
+          "description": "The ship that has began the depture process.",
+          "name": "Ship",
+          "type": "ship"
+        }
+      ],
+      "name": "On Departure Started",
+      "overridable": false
+    },
+    {
       "description": "Called every frame as the last action before showing the frame result to the user.",
       "hookVars": [],
       "name": "On Frame",
@@ -203,6 +215,18 @@
       "hookVars": [],
       "name": "On Object Render",
       "overridable": true
+    },
+    {
+      "description": "Called when a pain flash is displayed.",
+      "hookVars": [
+        {
+          "description": "The type of pain flash displayed: shield = 0 and hull = 1.",
+          "name": "Pain_Type",
+          "type": "number"
+        }
+      ],
+      "name": "On Pain Flash",
+      "overridable": false
     },
     {
       "description": "",
@@ -358,6 +382,64 @@
     "Application"
   ],
   "elements": [
+    {
+      "children": [
+        {
+          "children": [],
+          "description": "Creates a promise that resolves when the resolve function of the callback is called or errors if the reject function is called. The function will be called on it's own.",
+          "name": "promise",
+          "parameters": "function(function resolve(...), function reject(...))",
+          "returnDocumentation": "The promise or nil on error",
+          "returnType": "promise",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Creates a resolved promise with the values passed to this function.",
+          "name": "resolved",
+          "parameters": "...",
+          "returnDocumentation": "Resolved promise",
+          "returnType": "promise",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Creates an errored promise with the values passed to this function.",
+          "name": "errored",
+          "parameters": "...",
+          "returnDocumentation": "Errored promise",
+          "returnType": "promise",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Runs an asynchronous function",
+          "name": "run",
+          "parameters": "function body()",
+          "returnDocumentation": "A promise that resolves with the return value of the body when it reaches a return statement",
+          "returnType": "promise",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Suspends an asynchronous coroutine until the passed promise resolves.",
+          "name": "await",
+          "parameters": "promise",
+          "returnDocumentation": "The resolve value of the promise",
+          "returnType": "unknown",
+          "shortName": "",
+          "type": "function"
+        }
+      ],
+      "description": "Support library for asynchronous operations",
+      "name": "Async",
+      "shortName": "async",
+      "type": "library"
+    },
     {
       "children": [
         {
@@ -1143,6 +1225,34 @@
       "description": "Controls library",
       "name": "Controls",
       "shortName": "io",
+      "type": "library"
+    },
+    {
+      "children": [
+        {
+          "children": [],
+          "description": "Adds a function to be called from the specified game hook",
+          "name": "addHook",
+          "parameters": "string name, function hookFunction, [table conditionals = {}], [function override_func = return false]",
+          "returnDocumentation": "true if hook was installed properly, false otherwise",
+          "returnType": "boolean",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Executes a <b>blocking</b> sleep. Usually only necessary for development or testing purposes. Use with care!",
+          "name": "sleep",
+          "parameters": "number seconds",
+          "returnDocumentation": "",
+          "returnType": "void",
+          "shortName": "",
+          "type": "function"
+        }
+      ],
+      "description": "Basic engine access functions",
+      "name": "Engine",
+      "shortName": "engine",
       "type": "library"
     },
     {
@@ -3097,6 +3207,70 @@
           ],
           "description": "API for accessing values specific to the options screen.<br><b>Warning:</b> This is an internal API for the new UI system. This should not be used by other code and may be removed in the future!",
           "name": "OptionsMenu",
+          "shortName": "",
+          "type": "library"
+        },
+        {
+          "children": [
+            {
+              "children": [],
+              "description": "Loads the list of available campaigns",
+              "name": "loadCampaignList",
+              "parameters": "",
+              "returnDocumentation": "false if something failed while loading the list, true otherwise",
+              "returnType": "boolean",
+              "shortName": "",
+              "type": "function"
+            },
+            {
+              "children": [],
+              "description": "Get the campaign name and description lists",
+              "name": "getCampaignList",
+              "parameters": "",
+              "returnDocumentation": "Three tables with the names, file names, and descriptions of the campaigns",
+              "returnType": {
+                "elements": [
+                  {
+                    "element": "string",
+                    "type": "list"
+                  },
+                  {
+                    "element": "string",
+                    "type": "list"
+                  },
+                  {
+                    "element": "string",
+                    "type": "list"
+                  }
+                ],
+                "type": "tuple"
+              },
+              "shortName": "",
+              "type": "function"
+            },
+            {
+              "children": [],
+              "description": "Selects the specified campaign file name",
+              "name": "selectCampaign",
+              "parameters": "string campaign_file",
+              "returnDocumentation": "true if successful, false otherwise",
+              "returnType": "boolean",
+              "shortName": "",
+              "type": "function"
+            },
+            {
+              "children": [],
+              "description": "Resets the campaign with the specified file name",
+              "name": "resetCampaign",
+              "parameters": "string campaign_file",
+              "returnDocumentation": "true if successful, false otherwise",
+              "returnType": "boolean",
+              "shortName": "",
+              "type": "function"
+            }
+          ],
+          "description": "API for accessing data related to the campaign UI.<br><b>Warning:</b> This is an internal API for the new UI system. This should not be used by other code and may be removed in the future!",
+          "name": "CampaignMenu",
           "shortName": "",
           "type": "library"
         }
@@ -6383,6 +6557,75 @@
       "children": [
         {
           "children": [],
+          "description": "When the called on promise resolves, this function will be called with the resolved value of the promise.",
+          "name": "continueWith",
+          "parameters": "function(args...)",
+          "returnDocumentation": "A promise that will resolve with the return value of the passed function.",
+          "returnType": "promise",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "When the called on promise produces an error, this function will be called with the error value of the promise.",
+          "name": "catch",
+          "parameters": "function(args...)",
+          "returnDocumentation": "A promise that will resolve with the return value of the passed function.",
+          "returnType": "promise",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Checks if the promise is already resolved.",
+          "name": "isResolved",
+          "parameters": "",
+          "returnDocumentation": "true if resolved, false if result is still pending.",
+          "returnType": "boolean",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Checks if the promise is already in an error state.",
+          "name": "isErrored",
+          "parameters": "",
+          "returnDocumentation": "true if errored, false if result is still pending.",
+          "returnType": "boolean",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Gets the resolved value of this promise. Causes an error when used on an unresolved or errored promise!",
+          "name": "getValue",
+          "parameters": "",
+          "returnDocumentation": "The resolved values.",
+          "returnType": "unknown",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Gets the error value of this promise. Causes an error when used on an unresolved or resolved promise!",
+          "name": "getErrorValue",
+          "parameters": "",
+          "returnDocumentation": "The error values.",
+          "returnType": "unknown",
+          "shortName": "",
+          "type": "function"
+        }
+      ],
+      "description": "A promise that represents an operation that will return a value at some point in the future",
+      "name": "promise",
+      "shortName": "",
+      "superClass": "",
+      "type": "class"
+    },
+    {
+      "children": [
+        {
+          "children": [],
           "description": "The current score.",
           "getterType": "number",
           "name": "Score",
@@ -7080,8 +7323,18 @@
         },
         {
           "children": [],
-          "description": "Checks whether ship has a working subspace drive and is allowed to use it",
+          "description": "Checks whether ship has a working subspace drive, is allowed to use it, and is not disabled or limited by subsystem strength.",
           "name": "canWarp",
+          "parameters": "",
+          "returnDocumentation": "True if successful, or nil if ship handle is invalid",
+          "returnType": "boolean",
+          "shortName": "",
+          "type": "function"
+        },
+        {
+          "children": [],
+          "description": "Checks whether ship has a bay departure location and if its mother ship is present.",
+          "name": "canBayDepart",
           "parameters": "",
           "returnDocumentation": "True if successful, or nil if ship handle is invalid",
           "returnType": "boolean",

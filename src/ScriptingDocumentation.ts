@@ -1,3 +1,4 @@
+/* eslint-disable import/first */
 if (!process.versions.node) {
     // Hack to make better-ajv-errors work in browsers
     process.versions.node = "8.0";
@@ -9,9 +10,9 @@ import betterAjvErrors, {IOutputError} from "better-ajv-errors";
 import {ScriptingDocumentation as DocuSchema} from "../build/scripting";
 import {convertSchemaElement, DocumentationElement} from "./DocumentationElement";
 import scriptingSchema from "./schema/scripting.schema.json";
-import {generateDefinitions} from "./ts-gen/typescript_gen";
+import {generateDefinitions as generateTsDefinitions} from "./ts-gen/typescript_gen";
+import {generateDefinitions as generateLuaDefinitions} from "./luadoc-gen/luadoc_gen";
 import {ValidationError} from "./ValidationError";
-
 
 function validateScriptingDoc(jsonContent: unknown): DocuSchema {
     const ajv = new Ajv({jsonPointers: true});
@@ -37,7 +38,7 @@ export class ScriptingDocumentation {
         this.conditions = schemaData.conditions;
         this.enums = schemaData.enums;
         this.globalVariables = schemaData.globalVars;
-        this.elements = schemaData.elements.map((el) => convertSchemaElement(el, "root"));
+        this.elements = schemaData.elements.map(el => convertSchemaElement(el, "root"));
 
         this._schemaData = schemaData;
     }
@@ -49,10 +50,14 @@ export class ScriptingDocumentation {
     }
 
     generateTypings(): string {
-        return generateDefinitions(this);
+        return generateTsDefinitions(this);
     }
 
-    serialize(): any {
+    generateLuaDoc(): string {
+        return generateLuaDefinitions(this);
+    }
+
+    serialize(): object {
         return this._schemaData;
     }
 }

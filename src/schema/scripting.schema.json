@@ -96,7 +96,49 @@
                   ]
                 },
                 "parameters": {
-                  "type": "string"
+                  "oneOf": [
+                    {
+                      "title": "Simple Parameter List",
+                      "type": "string"
+                    },
+                    {
+                      "title": "OverloadList",
+                      "type": "array",
+                      "items": {
+                        "title": "FunctionOverload",
+                        "type": "array",
+                        "items": {
+                          "title": "FunctionParameter",
+                          "type": "object",
+                          "properties": {
+                            "type": {
+                              "$ref": "#/definitions/typeSpecifier"
+                            },
+                            "name": {
+                              "type": "string"
+                            },
+                            "default": {
+                              "type": "string"
+                            },
+                            "optional": {
+                              "type": "boolean"
+                            },
+                            "description": {
+                              "type": "string"
+                            }
+                          },
+                          "required": [
+                            "type",
+                            "name",
+                            "default",
+                            "optional",
+                            "description"
+                          ],
+                          "additionalProperties": false
+                        }
+                      }
+                    }
+                  ]
                 },
                 "returnDocumentation": {
                   "type": "string"
@@ -238,6 +280,70 @@
             "type",
             "key",
             "value"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "title": "Alternative Type",
+          "type": "object",
+          "properties": {
+            "elements": {
+              "type": "array",
+              "items": {
+                "$ref": "#/definitions/typeSpecifier"
+              }
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "alternative"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "elements"
+          ],
+          "additionalProperties": false
+        },
+        {
+          "title": "Function Type",
+          "type": "object",
+          "properties": {
+            "parameters": {
+              "type": "array",
+              "items": {
+                "title": "Function Type Parameter",
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string"
+                  },
+                  "type": {
+                    "$ref": "#/definitions/typeSpecifier"
+                  }
+                },
+                "required": [
+                  "type",
+                  "name"
+                ],
+                "additionalProperties": false
+              }
+            },
+            "returnType": {
+              "$ref": "#/definitions/typeSpecifier"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "function"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "parameters",
+            "returnType"
           ],
           "additionalProperties": false
         }

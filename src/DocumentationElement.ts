@@ -1,4 +1,9 @@
-import {DocumentationElement as SchemaDocumentationElement, TypeSpecifier} from "../build/scripting";
+import {
+    DocumentationElement as SchemaDocumentationElement,
+    OverloadList,
+    SimpleParameterList,
+    TypeSpecifier,
+} from "../build/scripting";
 
 export type DocumentationElement = ClassElement | LibraryElement | CallElement | PropertyElement;
 
@@ -23,7 +28,7 @@ export interface LibraryElement extends BaseDocumentationElement {
 export interface CallElement extends BaseDocumentationElement {
     type: "function" | "operator";
 
-    parameters: string;
+    parameters: SimpleParameterList | OverloadList;
     returnDocumentation: string;
     returnType: TypeSpecifier;
 }
@@ -36,15 +41,13 @@ export interface PropertyElement extends BaseDocumentationElement {
     setterType: TypeSpecifier;
 }
 
-export function convertSchemaElement(
-    schemaEl: SchemaDocumentationElement,
-    parentId: string): DocumentationElement {
-    const id = parentId + "-" + schemaEl.name;
+export function convertSchemaElement(schemaEl: SchemaDocumentationElement, parentId: string): DocumentationElement {
+    const id = `${parentId}-${schemaEl.name}`;
     const base = {
         id,
 
-        shortName:   schemaEl.shortName,
-        name:        schemaEl.name,
+        shortName: schemaEl.shortName,
+        name: schemaEl.name,
         description: schemaEl.description,
 
         children: schemaEl.children.map(e => convertSchemaElement(e, id)),
@@ -54,7 +57,7 @@ export function convertSchemaElement(
         case "class":
             return {
                 ...base,
-                type:       schemaEl.type,
+                type: schemaEl.type,
                 superClass: schemaEl.superClass,
             };
         case "library":
@@ -66,18 +69,18 @@ export function convertSchemaElement(
         case "operator":
             return {
                 ...base,
-                type:                schemaEl.type,
-                parameters:          schemaEl.parameters,
+                type: schemaEl.type,
+                parameters: schemaEl.parameters,
                 returnDocumentation: schemaEl.returnDocumentation,
-                returnType:          schemaEl.returnType,
+                returnType: schemaEl.returnType,
             };
         case "property":
             return {
                 ...base,
-                type:                schemaEl.type,
+                type: schemaEl.type,
                 returnDocumentation: schemaEl.returnDocumentation,
-                getterType:          schemaEl.getterType,
-                setterType:          schemaEl.setterType,
+                getterType: schemaEl.getterType,
+                setterType: schemaEl.setterType,
             };
     }
 }
