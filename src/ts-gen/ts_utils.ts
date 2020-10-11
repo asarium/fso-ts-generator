@@ -1,5 +1,5 @@
-import {FunctionParameter, OverloadList, SimpleParameterList, TypeSpecifier} from "../../build/scripting";
-import {isSimpleParameterList, isTupleType} from "../utils";
+import { FunctionParameter, OverloadList, SimpleParameterList, TypeSpecifier } from "../../build/scripting";
+import { isSimpleParameterList, isTupleType } from "../utils";
 
 export function fixTypeName(typeName: string): string {
     if (typeName === "object") {
@@ -43,6 +43,8 @@ export function typeSpecifierToTypeScriptType(type: TypeSpecifier): string {
             return `(${type.parameters.map(
                 x => `${x.name}:${typeSpecifierToTypeScriptType(x.type)}`,
             )}) => ${typeSpecifierToTypeScriptType(type.returnType)}`;
+        case "varargs":
+            return `${typeSpecifierToTypeScriptType(type.baseType)}...`;
     }
 }
 

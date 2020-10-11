@@ -1,4 +1,3 @@
-/* eslint-disable prettier/prettier */
 import {
     FunctionOverload,
     FunctionParameter,
@@ -6,6 +5,7 @@ import {
     SimpleParameterList,
     TupleType,
     TypeSpecifier,
+    VarargsType,
 } from "../../build/scripting";
 import {
     CallElement,
@@ -14,8 +14,8 @@ import {
     LibraryElement,
     PropertyElement,
 } from "../DocumentationElement";
-import {ScriptingDocumentation} from "../ScriptingDocumentation";
-import {LuaDocGenerator} from "./LuaDocGenerator";
+import { ScriptingDocumentation } from "../ScriptingDocumentation";
+import { LuaDocGenerator } from "./LuaDocGenerator";
 
 function isTuple(t: TypeSpecifier): t is TupleType {
     if (typeof t === "string") {
@@ -25,13 +25,24 @@ function isTuple(t: TypeSpecifier): t is TupleType {
     return t.type === "tuple";
 }
 
+function isVarargs(t: TypeSpecifier): t is VarargsType {
+    if (typeof t === "string") {
+        return false;
+    }
+
+    return t.type === "varargs";
+}
+
 function isSimpleOverloadList(list: SimpleParameterList | OverloadList): list is SimpleParameterList {
     return typeof list === "string";
 }
 
 function typeToString(type: TypeSpecifier): string {
     if (typeof type === "string") {
-        return type;
+        if (type === "unknown") {
+            return "any";
+        }
+        return type.replace(/:/g, "_");
     }
 
     switch (type.type) {
@@ -51,6 +62,8 @@ function typeToString(type: TypeSpecifier): string {
             return `fun(${type.parameters.map(x => `${x.name}: ${typeToString(x.type)}`).join(", ")}): ${typeToString(
                 type.returnType,
             )}`;
+        case "varargs":
+            return "any";
     }
 }
 
@@ -194,15 +207,29 @@ function writeFunctionElement(
         const sortedParams = Array.from(parameterDoc.values()).sort((left, right) =>
             left.name.localeCompare(right.name),
         );
+        const descriptionPrefixer = (desc: string) => {
+            if (desc.length === 0) {
+                return ""
+            }
+            if (!desc.match(/$[a-zA-Z]/)) {
+                return "_ ";
+            }
+            return "";
+        };
         for (const param of sortedParams) {
             if (param.default.length > 0) {
                 gen.addLine(
-                    `--- @param ${param.name} ${typeToString(param.type)} ${param.description} Default value: ${
-                        param.default
-                    }`,
+                    `--- @param ${param.name} ${typeToString(param.type)} ${descriptionPrefixer(param.description)}${param.description} Default value: ${param.default}`,
                 );
             } else {
-                gen.addLine(`--- @param ${param.name} ${typeToString(param.type)} ${param.description}`);
+                gen.addLine(`--- @param ${param.name} ${typeToString(param.type)} ${descriptionPrefixer(param.description)}${param.description}`);
+            }
+        }
+
+        if (overload.length > 0) {
+            const lastParam = overload[overload.length - 1];
+            if (isVarargs(lastParam.type)) {
+                gen.addLine(`--- @vararg ${typeToString(lastParam.type.baseType)}`)
             }
         }
 
@@ -214,7 +241,15 @@ function writeFunctionElement(
             gen.addLine(`--- @return ${typeToString(func.returnType)} ${func.returnDocumentation}`);
         }
 
-        gen.addLine(`function ${join(parentName, func.name, parent)}(${overload.map(x => x.name).join(", ")}) end`);
+        const mapParamToLua = (param: FunctionParameter): string => {
+            if (isVarargs(param.type)) {
+                return "...";
+            }
+
+            return param.name;
+        }
+
+        gen.addLine(`function ${join(parentName, func.name, parent)}(${overload.map(mapParamToLua).join(", ")}) end`);
     }
 }
 

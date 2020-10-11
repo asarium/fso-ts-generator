@@ -346,6 +346,26 @@
             "returnType"
           ],
           "additionalProperties": false
+        },
+        {
+          "title": "Varargs Type",
+          "type": "object",
+          "properties": {
+            "baseType": {
+              "$ref": "#/definitions/typeSpecifier"
+            },
+            "type": {
+              "type": "string",
+              "enum": [
+                "varargs"
+              ]
+            }
+          },
+          "required": [
+            "type",
+            "baseType"
+          ],
+          "additionalProperties": false
         }
       ]
     },

@@ -5,3 +5,4 @@
 /build
 /yarn.lock
 /dist/test
+/dist/**/*.map
