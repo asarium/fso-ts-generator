@@ -1,5 +1,5 @@
-import { FunctionParameter, OverloadList, SimpleParameterList, TypeSpecifier } from "../../build/scripting";
-import { isSimpleParameterList, isTupleType } from "../utils";
+import { FunctionParameter, OverloadList, TypeSpecifier } from "../../build/scripting";
+import { isTupleType } from "../utils";
 
 export function fixTypeName(typeName: string): string {
     if (typeName === "object") {
@@ -63,37 +63,33 @@ export function outputFunction(
     returnType: TypeSpecifier,
     returnDoc: string,
     description: string,
-    params: SimpleParameterList | OverloadList,
+    params: OverloadList,
     name: string,
     addExport: boolean,
 ): void {
-    if (isSimpleParameterList(params)) {
-        outputSimpleFunction(addLine, returnType, returnDoc, description, params, name, addExport);
-    } else {
-        for (const overload of params) {
-            let argCounter = 0;
-            for (const param of overload) {
-                if (param.name === "") {
-                    param.name = `arg${argCounter}`;
-                    ++argCounter;
-                }
-                fixParameter(param);
+    for (const overload of params) {
+        let argCounter = 0;
+        for (const param of overload) {
+            if (param.name === "") {
+                param.name = `arg${argCounter}`;
+                ++argCounter;
             }
-
-            outputDescription(addLine, description);
-
-            for (const param of overload) {
-                addLine(` * @param ${param.name} ${param.description}`);
-            }
-
-            outputReturnType(addLine, returnType, returnDoc);
-
-            addLine(
-                `${addExport ? "export function " : ""}${name}(${overload
-                    .map(p => functionParamToString(p))
-                    .join(", ")}): ${typeSpecifierToTypeScriptType(returnType)};`,
-            );
+            fixParameter(param);
         }
+
+        outputDescription(addLine, description);
+
+        for (const param of overload) {
+            addLine(` * @param ${param.name} ${param.description}`);
+        }
+
+        outputReturnType(addLine, returnType, returnDoc);
+
+        addLine(
+            `${addExport ? "export function " : ""}${name}(${overload
+                .map(p => functionParamToString(p))
+                .join(", ")}): ${typeSpecifierToTypeScriptType(returnType)};`,
+        );
     }
 }
 
@@ -110,24 +106,4 @@ function outputDescription(addLine: (line: string) => void, description: string)
     for (const line of getHtmlLines(description)) {
         addLine(` * ${line}`);
     }
-}
-
-function outputSimpleFunction(
-    addLine: (line: string) => void,
-    returnType: TypeSpecifier,
-    returnDoc: string,
-    description: string,
-    params: string,
-    name: string,
-    addExport: boolean,
-): void {
-    outputDescription(addLine, description);
-
-    addLine(` * @param {any[]} args ${params}`);
-
-    outputReturnType(addLine, returnType, returnDoc);
-
-    addLine(
-        `${addExport ? "export function " : ""}${name}(...args: any[]): ${typeSpecifierToTypeScriptType(returnType)};`,
-    );
 }

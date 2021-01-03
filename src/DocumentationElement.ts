@@ -1,7 +1,6 @@
 import {
     DocumentationElement as SchemaDocumentationElement,
     OverloadList,
-    SimpleParameterList,
     TypeSpecifier,
 } from "../build/scripting";
 
@@ -28,7 +27,7 @@ export interface LibraryElement extends BaseDocumentationElement {
 export interface CallElement extends BaseDocumentationElement {
     type: "function" | "operator";
 
-    parameters: SimpleParameterList | OverloadList;
+    parameters: OverloadList;
     returnDocumentation: string;
     returnType: TypeSpecifier;
 }

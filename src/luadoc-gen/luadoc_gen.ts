@@ -1,8 +1,6 @@
 import {
     FunctionOverload,
     FunctionParameter,
-    OverloadList,
-    SimpleParameterList,
     TupleType,
     TypeSpecifier,
     VarargsType,
@@ -31,10 +29,6 @@ function isVarargs(t: TypeSpecifier): t is VarargsType {
     }
 
     return t.type === "varargs";
-}
-
-function isSimpleOverloadList(list: SimpleParameterList | OverloadList): list is SimpleParameterList {
-    return typeof list === "string";
 }
 
 function typeToString(type: TypeSpecifier): string {
@@ -158,39 +152,12 @@ function generateOverloadList(
     return;
 }
 
-function writeFunctionElementWithSimpleParams(
-    parentName: string,
-    gen: LuaDocGenerator,
-    func: CallElement,
-    parent?: DocumentationElement,
-): void {
-    writeMultiLineString(func.description, gen);
-    if (isSimpleOverloadList(func.parameters)) {
-        if (func.parameters.length > 0) {
-            gen.addLine(`--- @overload fun(${func.parameters}):${typeToString(func.returnType)}`);
-        }
-    }
-
-    gen.addLine(`--- @return ${typeToString(func.returnType)} ${func.returnDocumentation}`);
-
-    if (func.parameters.length > 0) {
-        gen.addLine(`function ${join(parentName, func.name, parent)}(...) end`);
-    } else {
-        gen.addLine(`function ${join(parentName, func.name, parent)}() end`);
-    }
-}
-
 function writeFunctionElement(
     parentName: string,
     gen: LuaDocGenerator,
     func: CallElement,
     parent?: DocumentationElement,
 ): void {
-    if (isSimpleOverloadList(func.parameters)) {
-        writeFunctionElementWithSimpleParams(parentName, gen, func, parent);
-        return;
-    }
-
     for (const overload of func.parameters) {
         writeMultiLineString(func.description, gen);
         const parameterDoc = new Map<String, FunctionParameter>();

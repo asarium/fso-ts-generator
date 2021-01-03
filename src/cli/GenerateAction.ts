@@ -4,8 +4,14 @@ import {promises as fs} from "fs";
 import {ScriptingDocumentation} from "../ScriptingDocumentation";
 import {ValidationError} from "../ValidationError";
 
+function stdoutWriteAsync(content: string): Promise<void> {
+    return new Promise((done) => {
+        process.stdout.write(content, () => done());
+    });
+}
+
 async function generateDefs(jsonPath: string, outputPath: string, lua: boolean): Promise<void> {
-    console.log(`Generating ${lua ? "Lua" : "TypeScript"} definitions for ${jsonPath}.`);
+    await stdoutWriteAsync(`Generating ${lua ? "Lua" : "TypeScript"} definitions for ${jsonPath} ... `);
 
     const jsonContent = await fs.readFile(jsonPath, {encoding: "utf-8"});
 
@@ -21,6 +27,8 @@ async function generateDefs(jsonPath: string, outputPath: string, lua: boolean):
     }
 
     await fs.writeFile(outputPath, output);
+
+    await stdoutWriteAsync("Done.\n");
 }
 
 export class GenerateAction extends CommandLineAction {

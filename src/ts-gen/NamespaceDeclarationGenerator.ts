@@ -1,4 +1,4 @@
-import {OverloadList, SimpleParameterList, TypeSpecifier} from "../../build/scripting";
+import {OverloadList, TypeSpecifier} from "../../build/scripting";
 import {BaseDeclarationGenerator, indentLine} from "./DeclarationGenerator";
 import {isTupleType} from "../utils";
 import {typeSpecifierToTypeScriptType, getHtmlLines, outputFunction} from "./ts_utils";
@@ -8,7 +8,7 @@ export class NamespaceDeclarationGenerator extends BaseDeclarationGenerator {
         returnType: TypeSpecifier,
         returnDoc: string,
         description: string,
-        params: SimpleParameterList | OverloadList,
+        params: OverloadList,
         name: string,
     ): void {
         outputFunction((s: string) => this.addLine(s), returnType, returnDoc, description, params, name, true);

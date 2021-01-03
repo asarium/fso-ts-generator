@@ -1,4 +1,4 @@
-import {OverloadList, SimpleParameterList, TypeSpecifier} from "../../build/scripting";
+import {OverloadList, TypeSpecifier} from "../../build/scripting";
 import {isTupleType} from "../utils";
 import {BaseDeclarationGenerator} from "./DeclarationGenerator";
 import {getHtmlLines, outputFunction, typeSpecifierToTypeScriptType} from "./ts_utils";
@@ -8,7 +8,7 @@ export class ClassDeclarationGenerator extends BaseDeclarationGenerator {
         returnType: TypeSpecifier,
         returnDoc: string,
         description: string,
-        params: SimpleParameterList | OverloadList,
+        params: OverloadList,
         name: string,
     ): void {
         if (name === "read" && isTupleType(returnType) && returnType.elements[1] === "...") {
@@ -46,7 +46,7 @@ export class ClassDeclarationGenerator extends BaseDeclarationGenerator {
 
     indexer(
         description: string,
-        params: SimpleParameterList | OverloadList,
+        params: OverloadList,
         returnType: TypeSpecifier,
         returnDoc: string,
     ): void {

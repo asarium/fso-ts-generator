@@ -96,49 +96,41 @@
                   ]
                 },
                 "parameters": {
-                  "oneOf": [
-                    {
-                      "title": "Simple Parameter List",
-                      "type": "string"
-                    },
-                    {
-                      "title": "OverloadList",
-                      "type": "array",
-                      "items": {
-                        "title": "FunctionOverload",
-                        "type": "array",
-                        "items": {
-                          "title": "FunctionParameter",
-                          "type": "object",
-                          "properties": {
-                            "type": {
-                              "$ref": "#/definitions/typeSpecifier"
-                            },
-                            "name": {
-                              "type": "string"
-                            },
-                            "default": {
-                              "type": "string"
-                            },
-                            "optional": {
-                              "type": "boolean"
-                            },
-                            "description": {
-                              "type": "string"
-                            }
-                          },
-                          "required": [
-                            "type",
-                            "name",
-                            "default",
-                            "optional",
-                            "description"
-                          ],
-                          "additionalProperties": false
+                  "title": "OverloadList",
+                  "type": "array",
+                  "items": {
+                    "title": "FunctionOverload",
+                    "type": "array",
+                    "items": {
+                      "title": "FunctionParameter",
+                      "type": "object",
+                      "properties": {
+                        "type": {
+                          "$ref": "#/definitions/typeSpecifier"
+                        },
+                        "name": {
+                          "type": "string"
+                        },
+                        "default": {
+                          "type": "string"
+                        },
+                        "optional": {
+                          "type": "boolean"
+                        },
+                        "description": {
+                          "type": "string"
                         }
-                      }
+                      },
+                      "required": [
+                        "type",
+                        "name",
+                        "default",
+                        "optional",
+                        "description"
+                      ],
+                      "additionalProperties": false
                     }
-                  ]
+                  }
                 },
                 "returnDocumentation": {
                   "type": "string"
